@@ -1,0 +1,10 @@
+getMessageBoards:
+  handler: src/functions/getMessageBoards.handler
+  description: Get User by Email.
+  events:
+    - http:
+        path: boards
+        method: get
+        cors: true
+  memorySize: 128
+  timeout: 30

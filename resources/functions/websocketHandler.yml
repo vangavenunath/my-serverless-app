@@ -1,0 +1,17 @@
+connectionHandler:
+  handler: src/functions/wsConnectionHandler.handler
+  events:
+    - websocket:
+        route: $connect
+    - websocket:
+        route: $disconnect
+defaultHandler:
+  handler: src/functions/wsDefaultHandler.handler
+  events:
+    - websocket:
+        route: $default
+actionHandler:
+  handler: src/functions/wsActionHandler.handler
+  events:
+    - websocket:
+        route: sendmessage

@@ -1,0 +1,10 @@
+getUserByEmail:
+  handler: src/functions/getUserByEmail.handler
+  description: Get User by Email.
+  events:
+    - http:
+        path: users/{email}
+        method: get
+        cors: true
+  memorySize: 128
+  timeout: 30

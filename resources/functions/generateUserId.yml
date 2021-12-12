@@ -1,0 +1,11 @@
+generateUserId:
+  handler: src/functions/generateUserId.handler
+  description: Generate user id triggered by SNS 
+  events:
+    - sns:
+        arn: !Ref usersSNSTopic
+        topicName: ${self:provider.environment.SNS_USERS_TOPIC}
+  memorySize: 256
+  environment:
+    SNS_ARN: { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:provider.environment.SNS_USERS_TOPIC}" ] ]  }
+  timeout: 900

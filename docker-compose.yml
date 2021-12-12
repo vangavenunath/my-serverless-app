@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - "8000:4566"
+    environment:
+      DEFAULT_REGION: ap-southeast-2
+      SERVICES: sqs,sns,dynamodb
+    volumes:
+      - "./localstack-init.sh:/docker-entrypoint-initaws.d/localstack-init.sh"

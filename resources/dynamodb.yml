@@ -1,0 +1,57 @@
+Resources:
+  usersDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: EMAIL
+          AttributeType: S
+      KeySchema:
+        - AttributeName: EMAIL
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: users_${self:provider.environment.STAGE}
+  messagesDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: MESSAGE
+          AttributeType: S
+        - AttributeName: BOARD_NAME
+          AttributeType: S
+      KeySchema:
+        - AttributeName: MESSAGE
+          KeyType: HASH
+        - AttributeName: BOARD_NAME
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: messages_${self:provider.environment.STAGE}
+  boardsDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: BOARD_NAME
+          AttributeType: S
+      KeySchema:
+        - AttributeName: BOARD_NAME
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: boards_${self:provider.environment.STAGE}
+  connectionsDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: CONNECTION_ID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CONNECTION_ID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: connections_${self:provider.environment.STAGE}

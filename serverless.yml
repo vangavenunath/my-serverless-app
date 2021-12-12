@@ -1,0 +1,69 @@
+service: sample-myapp
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  region: ap-southeast-2
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    NODE_ENV: dev
+    STAGE: nonprod
+    SNS_USERS_TOPIC: REGISTERED_USERS_${self:provider.environment.STAGE}
+    SQS_MESSAGES_QUEUE: MESSAGES_${self:provider.environment.STAGE}
+  iam:
+    role:
+      statements:
+          - Effect: Allow
+            Action:
+              - logs:*
+            Resource: 
+              - "*"
+          - Effect: Allow
+            Action:
+              - execute-api:ManageConnections
+            Resource: 
+              - "arn:aws:execute-api:*:*:*/@connections/*"
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+              - dynamodb:BatchWriteItem
+            Resource: 
+              - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/users_${self:provider.environment.STAGE}"
+              - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/messages_${self:provider.environment.STAGE}"
+              - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/boards_${self:provider.environment.STAGE}"
+          - Effect: Allow
+            Action:
+              - sns:Publish
+              - sns:Subscribe
+            Resource: { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:provider.environment.SNS_USERS_TOPIC}" ] ]  }
+          - Effect: Allow
+            Action:
+              - sqs:SendMessage
+              - sqs:DeleteMessage
+              - sqs:ReceiveMessage
+              - sqs:GetQueueUrl
+              - sqs:ListQueues
+            Resource: { "Fn::Join" : ["", ["arn:aws:sqs:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:provider.environment.SQS_MESSAGES_QUEUE}" ] ]  }
+plugins:
+  - serverless-plugin-typescript 
+  - serverless-offline
+
+functions:
+  - ${file(resources/functions/getUserByEmail.yml)}
+  - ${file(resources/functions/registerUser.yml)}
+  - ${file(resources/functions/getMessageBoards.yml)}
+  - ${file(resources/functions/createMessageBoard.yml)}
+  - ${file(resources/functions/postMessageOnBoard.yml)}
+  - ${file(resources/functions/broadcastMessages.yml)}
+  - ${file(resources/functions/generateUserId.yml)}
+  - ${file(resources/functions/websocketHandler.yml)}
+resources:
+  - ${file(resources/dynamodb.yml)}
+  - ${file(resources/sns.yml)}
+  - ${file(resources/sqs.yml)}

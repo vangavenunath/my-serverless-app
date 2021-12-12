@@ -1,0 +1,10 @@
+createMessageBoard:
+  handler: src/functions/createMessageBoard.handler
+  description: Save username and email.
+  events:
+    - http:
+        path: boards
+        method: post
+        cors: true
+  memorySize: 128
+  timeout: 30

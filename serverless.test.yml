@@ -1,0 +1,5 @@
+- name: getMessageBoards endpoint returns 200
+  endpoint:
+    function: getMessageBoards
+  response:
+    status: 200

@@ -1,0 +1,12 @@
+registerUser:
+  handler: src/functions/registerUser.handler
+  description: Save username and email.
+  events:
+    - http:
+        path: users
+        method: post
+        cors: true
+  environment:
+    SNS_ARN: { "Fn::Join" : ["", ["arn:aws:sns:${self:provider.region}:", { "Ref" : "AWS::AccountId" }, ":${self:provider.environment.SNS_USERS_TOPIC}" ] ]  }
+  memorySize: 128
+  timeout: 30

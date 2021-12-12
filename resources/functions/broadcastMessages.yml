@@ -1,0 +1,13 @@
+
+broadcastMessages:
+  handler: src/functions/broadcastMessages.handler
+  description: Broadcast message to websocket connections
+  memorySize: 128
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt:
+            - messagesQueue
+            - Arn
+        batchSize: 1
+  timeout: 300

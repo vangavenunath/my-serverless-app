@@ -1,0 +1,12 @@
+postMessageOnBoard:
+  handler: src/functions/postMessageOnBoard.handler
+  description: Save username and email.
+  events:
+    - http:
+        path: messages
+        method: post
+        cors: true
+  environment:
+    SQS_URL: { "Fn::Join" : ["", ["https://sqs.${self:provider.region}.amazonaws.com/", { "Ref" : "AWS::AccountId" }, "/${self:provider.environment.SQS_MESSAGES_QUEUE}" ] ]  }
+  memorySize: 128
+  timeout: 30
