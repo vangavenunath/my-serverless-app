@@ -13,7 +13,7 @@ export interface BoardInput {
 
 export interface ConnectionInput {
     connectionId: string,
-    domain?: string,
+    domainName?: string,
     stage?: string
 }
 

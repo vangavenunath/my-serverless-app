@@ -37,6 +37,7 @@ provider:
               - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/users_${self:provider.environment.STAGE}"
               - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/messages_${self:provider.environment.STAGE}"
               - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/boards_${self:provider.environment.STAGE}"
+              - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/connections_${self:provider.environment.STAGE}"
           - Effect: Allow
             Action:
               - sns:Publish

@@ -152,10 +152,10 @@ export const getMessageBoards = async () => {
   }
 };
 
-export const getAllConnections = async () => {
+export const getAllConnections = async (): Promise<ConnectionInput[]> => {
   try {
     const params: ScanCommandInput = {
-      ProjectionExpression: "CONNECTION_ID, DOMAIN, STAGE",
+      ProjectionExpression: "CONNECTION_ID, DOMAINNAME, STAGE",
       TableName: `connections_${process.env.STAGE}`,
     };
     const data: ScanCommandOutput = await ddbClient.send(
@@ -165,7 +165,7 @@ export const getAllConnections = async () => {
       ? data.Items.map((v) => {
           return {
             connectionId: v.CONNECTION_ID.S,
-            domain: v.DOMAIN.S,
+            domainName: v.DOMAINNAME.S,
             stage: v.STAGE.S,
           };
         })
@@ -182,7 +182,7 @@ export const insertConnection = async (data: ConnectionInput) => {
       TableName: `connections_${process.env.STAGE}`,
       Item: {
         CONNECTION_ID: { S: data.connectionId },
-        DOMAIN: { S: data.domain },
+        DOMAINNAME: { S: data.domainName },
         STAGE: { S: data.stage },
       },
     };
